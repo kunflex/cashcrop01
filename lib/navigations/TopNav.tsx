@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const TopNav = () => {
+  
   // 🔔 Handle profile click
   const handleProfilePress = () => {
     Alert.alert('Profile Clicked', 'You tapped the profile picture.');
@@ -13,15 +15,30 @@ const TopNav = () => {
     Alert.alert('Notifications', 'You tapped the notification icon.');
   };
 
+  // ⏪ Handle Previous click
+   const navigation = useNavigation();
+
+  // Handle Previous click
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack(); // ⬅️ go to previous screen
+    } else {
+      Alert.alert('Info', 'No previous screen found.');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {/* App Name */}
-      <Text style={styles.appName}>Cash Crop Detector</Text>
+      {/* Back button */}
+      <TouchableOpacity onPress={handleBackPress} style={styles.iconButton}>
+        <Ionicons name="arrow-back-outline" size={26} color="black" />
+      </TouchableOpacity>
+
 
       {/* Right side: notification + profile */}
       <View style={styles.rightSection}>
         <TouchableOpacity onPress={handleNotificationPress} style={styles.iconButton}>
-          <Ionicons name="notifications-outline" size={26} color="#fff" />
+          <Ionicons name="notifications-outline" size={26} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleProfilePress}>
@@ -38,14 +55,14 @@ const TopNav = () => {
 const styles = StyleSheet.create({
   container: {
     height: 60,
-    backgroundColor: '#4CAF50', // green background
+    backgroundColor: '#4CAF50',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 15,
   },
   appName: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -54,6 +71,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconButton: {
+    backgroundColor: 'white',
+    borderRadius: 50,
+    padding: 4,
     marginRight: 15,
   },
   profileImage: {

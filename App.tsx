@@ -7,7 +7,7 @@ import { enableScreens } from 'react-native-screens'; // ← enable screens
 
 import SplashScreen from './lib/SplashScreen';
 import DashboardApp from './lib/DashboardApp';
-import CropDetails from './lib/screens/CropDetails';
+import CropDetails from './lib/pages/CropDetails';
 import UserVerification from './lib/components/UserVerification';
 
 enableScreens(); // Important!

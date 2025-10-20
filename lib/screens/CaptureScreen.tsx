@@ -1,214 +1,224 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
+  TouchableOpacity,
   Image,
-  Alert,
-  Modal,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
-import { Camera, useCameraDevice } from 'react-native-vision-camera';
-import { launchImageLibrary } from 'react-native-image-picker';
+import Modal from 'react-native-modal';
+import { launchCamera, launchImageLibrary, Asset } from 'react-native-image-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import TopNav from '../navigations/TopNav';
 
 const CaptureScreen = () => {
   const navigation = useNavigation();
-  const [hasPermission, setHasPermission] = useState(false);
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [plantDetails, setPlantDetails] = useState<any>(null);
-  const [modalVisible, setModalVisible] = useState(true);
-  const [showCamera, setShowCamera] = useState(false);
-  const device = useCameraDevice('back');
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [detecting, setDetecting] = useState(false);
+  const [cropType, setCropType] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    const getPermission = async () => {
-      const status = await Camera.requestCameraPermission();
-      setHasPermission(status === 'granted');
-    };
-    getPermission();
-  }, []);
+  // Open modal to choose source
+  const openImageOptions = () => setModalVisible(true);
 
-  const takePicture = () => {
-    if (!device) return;
-    setShowCamera(true);
+  const handleTakePhoto = async () => {
     setModalVisible(false);
-  };
-
-  const pickImage = async () => {
-    try {
-      const result = await launchImageLibrary({ mediaType: 'photo' });
-      if (result.assets && result.assets.length > 0) {
-        setPhoto(result.assets[0].uri || null);
-        setModalVisible(false);
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to pick image.');
+    const result = await launchCamera({ mediaType: 'photo', quality: 0.8 });
+    if (result.assets && result.assets[0].uri) {
+      handleImageSelected(result.assets[0]);
     }
   };
 
-  const detectPlant = async () => {
-    if (!photo) return;
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', {
-        uri: photo,
-        name: 'plant.jpg',
-        type: 'image/jpeg',
-      } as any);
-
-      const response = await fetch('https://your-plant-detection-api.com/detect', {
-        method: 'POST',
-        body: formData,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      const data = await response.json();
-      setPlantDetails(data);
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to detect plant.');
-    } finally {
-      setLoading(false);
+  const handleChoosePhoto = async () => {
+    setModalVisible(false);
+    const result = await launchImageLibrary({ mediaType: 'photo', quality: 0.8 });
+    if (result.assets && result.assets[0].uri) {
+      handleImageSelected(result.assets[0]);
     }
+  };
+
+  const handleImageSelected = (asset: Asset) => {
+    setImageUri(asset.uri || null);
+    setCropType(null);
+    detectCrop(asset.uri || '');
+  };
+
+  const handleCancel = () => {
+    setModalVisible(false);
+    navigation.goBack();
+  };
+
+  // Simulate crop detection (replace with API call in production)
+  const detectCrop = (_uri: string) => {
+    setDetecting(true);
+    setCropType(null);
+
+    setTimeout(() => {
+      setCropType('Aloe Vera'); // Fake detection result
+      setDetecting(false);
+    }, 2000);
   };
 
   return (
-    <View style={styles.container}>
-      {/* Modal Popup */}
-      <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Select an option</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={takePicture}>
-              <Text style={styles.modalText}>Take Photo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={pickImage}>
-              <Text style={styles.modalText}>Upload from Gallery</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton, { backgroundColor: '#FF5252' }]}
-              onPress={() => navigation.goBack()}
-            >
-              <Text style={styles.modalText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Camera */}
-      {showCamera && device && hasPermission && (
-        <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
-      )}
+    <>
+    {/* title bar */}
+    <TopNav/>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Crop Detection</Text>
 
       {/* Image Preview */}
-      {photo && !showCamera && (
-        <View style={styles.previewContainer}>
-          <Image source={{ uri: photo }} style={styles.previewImage} />
-        </View>
-      )}
+      <View style={styles.previewContainer}>
+        {imageUri ? (
+          <Image source={{ uri: imageUri }} style={styles.previewImage} />
+        ) : (
+          <View style={styles.placeholder}>
+            <Ionicons name="image-outline" size={60} color="#aaa" />
+            <Text style={styles.placeholderText}>No Image Selected</Text>
+          </View>
+        )}
+      </View>
 
-      {/* Buttons */}
-      {photo && (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#FF5252' }]}
-            onPress={() => {
-              setPhoto(null);
-              setPlantDetails(null);
-              setModalVisible(true);
-            }}
-          >
-            <Text style={styles.text}>Remove</Text>
-          </TouchableOpacity>
+      {/* Open Modal Button */}
+      <TouchableOpacity style={styles.selectButton} onPress={openImageOptions}>
+        <Ionicons name="add-circle-outline" size={20} color="#fff" />
+        <Text style={styles.selectButtonText}>Select Image</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#2196F3' }]}
-            onPress={detectPlant}
-          >
-            {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.text}>Detect</Text>}
-          </TouchableOpacity>
-        </View>
+      {/* Detection Spinner */}
+      {detecting && (
+        <ActivityIndicator size="large" color="#2e7d32" style={{ marginTop: 20 }} />
       )}
 
       {/* Detection Result */}
-      {plantDetails && (
+      {cropType && (
         <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>Plant Detected:</Text>
-          <Text style={styles.resultText}>{JSON.stringify(plantDetails, null, 2)}</Text>
+          <Text style={styles.resultLabel}>Detected Crop:</Text>
+          <Text style={styles.resultText}>{cropType}</Text>
         </View>
       )}
-    </View>
+
+      {/* Modal Popup */}
+      <Modal
+        isVisible={modalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.modalButton} onPress={handleTakePhoto}>
+            <Text style={styles.modalText}>📷 Take Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalButton} onPress={handleChoosePhoto}>
+            <Text style={styles.modalText}>🖼️ Choose from Gallery</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.cancelButton]}
+            onPress={handleCancel}>
+            <Text style={[styles.modalText, { color: '#f44336' }]}>❌ Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </ScrollView>
+    </>
   );
 };
 
 export default CaptureScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContainer: {
-    width: 280,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+  container: {
     padding: 20,
     alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    flexGrow: 1,
   },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
-  modalButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 50,
-    marginVertical: 5,
-    width: '100%',
-    alignItems: 'center',
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+    marginBottom: 20,
   },
-  modalText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-  buttonsContainer: {
-    position: 'absolute',
-    bottom: 40,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  button: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 50,
-  },
-  text: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
   previewContainer: {
-    flex: 1,
+    width: '100%',
+    height: 250,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 3,
+  },
+  previewImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  placeholder: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  previewImage: {
-    width: '90%',
-    height: '70%',
+  placeholderText: {
+    color: '#aaa',
+    marginTop: 10,
+    fontSize: 16,
+  },
+  selectButton: {
+    flexDirection: 'row',
+    backgroundColor: '#4da6ff',
+    paddingVertical: 15,
+    paddingHorizontal: 50,
     borderRadius: 12,
-    resizeMode: 'contain',
+    alignItems: 'center',
+  },
+  selectButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    marginLeft: 8,
+    fontSize: 16,
   },
   resultContainer: {
-    position: 'absolute',
-    top: 180,
-    left: 20,
-    right: 20,
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 12,
-    elevation: 5,
+    padding: 20,
+    width: '100%',
+    borderRadius: 15,
+    alignItems: 'center',
+    marginTop: 20,
+    elevation: 2,
   },
-  resultTitle: { fontWeight: 'bold', fontSize: 16, marginBottom: 5 },
-  resultText: { fontSize: 14, color: '#333' },
+  resultLabel: {
+    fontSize: 16,
+    color: '#555',
+  },
+  resultText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+    marginTop: 5,
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  modalButton: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 1,
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  cancelButton: {
+    borderBottomWidth: 0,
+  },
 });

@@ -8,6 +8,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
+import TopNav from '../navigations/TopNav';
 
 const ProfileScreen = () => {
   const handleLogout = () => {
@@ -32,6 +33,10 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
+      {/* Top bar */}
+      <TopNav/>
+      
+      <View style={{height:260,backgroundColor:'#4CAF50',zIndex:0,borderBottomEndRadius:'20%', borderBottomStartRadius:'20%'}}></View>
       {/* Profile Image & Edit Button */}
       <View style={styles.profileSection}>
         <Image source={{ uri: user.image }} style={styles.profileImage} />
@@ -76,15 +81,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center', 
     marginVertical: 40,
-    marginTop:100,
+    marginTop:-90,
   },
 
   profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: '#4CAF50',
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 5,
+    borderColor: 'white',
   },
   welcomeMessage: {
     fontSize: 18,
@@ -108,6 +113,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   infoContainer: {
+    backgroundColor:'white',
+    padding:12,
+    borderRadius:10,
     marginHorizontal: 25,
     marginBottom: 30,
   },

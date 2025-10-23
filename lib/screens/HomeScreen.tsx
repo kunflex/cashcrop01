@@ -18,6 +18,7 @@ import SearchBar from '../navigations/SearchBar';
 import Header from '../navigations/Header';
 import WeatherCard from '../components/WeatherCard';
 import axios from 'axios';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -205,14 +206,15 @@ const HomeScreen = () => {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#4da6ff" />
+        <ActivityIndicator size="large" color="#4CAF50" />
       </View>
     );
   }
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaProvider>
+        <View style={styles.container}>
         {/* header file */}
         <Header />
         {/* Search Bar */}
@@ -257,6 +259,7 @@ const HomeScreen = () => {
           />
         </ScrollView>
       </View>
+      </SafeAreaProvider>
     </>
   );
 };

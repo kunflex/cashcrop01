@@ -186,8 +186,6 @@ const CropDetails = () => {
             </View>
           )}
         </ScrollView>
-
-        
       </View>
     </>
   );
@@ -197,8 +195,8 @@ export default CropDetails;
 
 const styles = StyleSheet.create({
   screen: {
-    flex:1,
-    backgroundColor:'white',
+    flex: 1,
+    backgroundColor: 'white',
   },
   scrollContainer: {
     flex: 1,

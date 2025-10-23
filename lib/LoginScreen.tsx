@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: '#fff',
   },
+  
   title: {
     fontSize: Math.min(width * 0.08, 28),
     fontWeight: 'bold',

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: 6,
   },
   deluser:{
     flex:1,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: '#4CAF50',
   },
 });

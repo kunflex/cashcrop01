@@ -29,126 +29,291 @@ const HomeScreen = () => {
   const [search, setSearch] = useState('');
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const plantPosts = [
+   const plantPosts = [
     {
       id: 1,
-      name: 'Aloe Vera',
-      image: 'https://i.pravatar.cc/100',
+      name: 'Cocoa',
+      image: 'https://media.istockphoto.com/id/1470083042/photo/cacao-plant.jpg?s=1024x1024&w=is&k=20&c=3ZCzbyzKADv45vUDi13LRv61KzyipGKUqJXab4jPWmY=',
       description:
-        'Aloe Vera is a succulent plant known for its healing properties.',
-      likes: 150,
+        "Cocoa is Ghana's primary cash crop, used for chocolate production.",
+      likes: 450,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Flowering → 8–12 weeks: Fruit Set → Harvest',
-      diseases: 'Root rot, leaf spot',
-      pests: 'Aphids, mealybugs',
+        '1–3 months: Germination → 6–12 months: Seedling → 3–5 years: Flowering & Pod formation → 5–6 years: Full production',
+      cultivationtips:
+        'Plant in humid tropical climate with shade trees; maintain soil fertility and prune regularly.',
+      uses: 'Chocolate, cocoa powder, cocoa butter.',
+      diseases: 'Black pod disease, swollen shoot virus',
+      pests: 'Mirids, mealybugs',
     },
     {
       id: 2,
-      name: 'Snake Plant',
-      image: 'https://i.pravatar.cc/100',
+      name: 'Oil Palm',
+      image: 'https://cdn.pixabay.com/photo/2014/03/15/17/03/oil-palm-287902_640.jpg',
       description:
-        'An easy-to-grow indoor plant that purifies air efficiently.',
-      likes: 230,
+        'Oil Palm produces palm oil widely used in foods and cosmetics.',
+      likes: 420,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Flowering → 8–12 weeks: Fruit Set → Harvest',
-      diseases: 'Leaf blight',
-      pests: 'Spider mites',
+        '0–6 months: Seedling → 3–4 years: First fruiting → 25–30 years: Productive palms',
+      cultivationtips:
+        'Plant in fertile, well-drained soils; irrigate moderately and prune fronds.',
+      uses: 'Palm oil for cooking, soap, and biofuel.',
+      diseases: 'Bud rot, Ganoderma basal stem rot',
+      pests: 'Rhinoceros beetle, weevils',
     },
     {
       id: 3,
-      name: 'Peace Lily',
-      image: 'https://i.pravatar.cc/100',
-      description:
-        'Peace lilies thrive in shade and produce beautiful white blooms.',
-      likes: 180,
+      name: 'Cashew',
+      image: 'https://media.istockphoto.com/id/518856308/photo/cashew-fruit-hanging-on-tree.jpg?s=1024x1024&w=is&k=20&c=zYoq-bKItiSILDUsgySeZ9tkjhcIZZwLYgN00sB873s=',
+      description: 'Cashew nuts are exported for snack and oil production.',
+      likes: 380,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Flowering → 8–12 weeks: Blooming',
-      diseases: 'Bacterial leaf spot',
-      pests: 'Thrips, aphids',
+        '0–2 months: Germination → 3–12 months: Seedling → 3–5 years: Flowering → 5–7 years: Fruiting → Harvest',
+      cultivationtips:
+        'Grow in well-drained sandy soils; prune trees for sunlight penetration.',
+      uses: 'Nuts, cashew apple juice, oil.',
+      diseases: 'Anthracnose, powdery mildew',
+      pests: 'Tea mosquito bug, aphids',
     },
     {
       id: 4,
-      name: 'Cocoa',
-      image: 'https://i.pravatar.cc/100?img=4',
+      name: 'Rubber',
+      image: 'https://cdn.pixabay.com/photo/2018/06/16/20/25/plant-3479460_1280.jpg',
       description:
-        'Cocoa is cultivated for its beans, which are processed into chocolate and cocoa butter.',
-      likes: 340,
+        'Rubber trees are tapped for latex used in various products.',
+      likes: 360,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Flowering → 8–12 weeks: Pod Development → Harvest',
-      diseases: 'Black pod, witches’ broom',
-      pests: 'Mirids, cocoa pod borer',
+        '0–6 months: Nursery → 5–7 years: Tapping begins → 25–30 years: Productive lifespan',
+      cultivationtips:
+        'Plant in humid, well-drained soils; proper spacing and fertilization are required.',
+      uses: 'Latex, tires, gloves, industrial products.',
+      diseases: 'Leaf blight, powdery mildew',
+      pests: 'Mealybugs, lace bugs',
     },
     {
       id: 5,
       name: 'Maize',
-      image: 'https://i.pravatar.cc/100?img=5',
-      description:
-        'Maize is a cereal crop used for food, feed, and industrial products.',
-      likes: 410,
+      image: 'https://media.istockphoto.com/id/1133692494/photo/corn-cob-with-green-leaves-growth-in-agriculture-field-outdoor.jpg?s=612x612&w=0&k=20&c=xFYeDDO46cJ73fXEvqt0NFV6mSugjXoDAxdBNqno9Ac=',
+      description: 'Maize is a staple cereal crop and cash crop in Ghana.',
+      likes: 500,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Tasseling → 8–12 weeks: Grain Fill → Harvest',
-      diseases: 'Rust, maize streak virus',
-      pests: 'Fall armyworm, stem borer',
+        '0–2 weeks: Germination → 2–6 weeks: Vegetative growth → 6–10 weeks: Flowering → 10–14 weeks: Maturity → Harvest',
+      cultivationtips:
+        'Plant in fertile soils; rotate crops; control weeds and pests.',
+      uses: 'Food, livestock feed, processed foods.',
+      diseases: 'Maize streak virus, rust',
+      pests: 'Armyworms, stem borers',
     },
     {
       id: 6,
       name: 'Rice',
-      image: 'https://i.pravatar.cc/100?img=6',
-      description:
-        'Rice is a staple grain crop grown in flooded paddies across tropical regions.',
+      image: 'https://media.istockphoto.com/id/622925154/photo/ripe-rice-in-the-field-of-farmland.jpg?s=612x612&w=0&k=20&c=grtA7L3dm_SP80Fdt-PpIwu5GYacZygErTDUDNIKHwY=',
+      description: 'Rice is cultivated in Ghana mainly in irrigated lowlands.',
       likes: 480,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Tillering → 4–6 weeks: Vegetative → 6–8 weeks: Heading → 8–12 weeks: Grain Maturity → Harvest',
-      diseases: 'Blast, bacterial blight',
-      pests: 'Planthoppers, stem borers',
+        '0–3 weeks: Germination → 3–6 weeks: Seedling → 6–12 weeks: Tillering → 12–16 weeks: Flowering → 16–20 weeks: Ripening → Harvest',
+      cultivationtips:
+        'Maintain flooded fields, control weeds, and fertilize appropriately.',
+      uses: 'Food, rice bran oil, animal feed.',
+      diseases: 'Rice blast, sheath blight',
+      pests: 'Rice weevil, stem borers',
     },
     {
       id: 7,
-      name: 'Cassava',
-      image: 'https://i.pravatar.cc/100?img=7',
-      description:
-        'Cassava is a starchy root crop that is a major source of carbohydrates.',
-      likes: 320,
+      name: 'Yam',
+      image: 'https://media.istockphoto.com/id/1344941660/photo/different-grade-of-sweet-potato-growing-white-and-purple-sweet-potato.jpg?s=612x612&w=0&k=20&c=Sp8Q8ygjcqgvrY_TqzrPXDV9l3nR6qK-bVm6CbecOzk=',
+      description: 'Yam is a tuber crop widely grown for food and trade.',
+      likes: 400,
       lifecycle:
-        '1–2 weeks: Sprouting → 2–4 weeks: Vegetative → 4–6 weeks: Root Formation → 6–8 weeks: Enlargement → 8–12 weeks: Maturity → Harvest',
-      diseases: 'Mosaic disease, bacterial blight',
-      pests: 'Whiteflies, mealybugs',
+        '0–2 weeks: Sprouting → 3–6 weeks: Vegetative growth → 7–20 weeks: Tuber formation → Harvest',
+      cultivationtips:
+        'Requires mounds/ridges for planting; irrigate moderately; weed control is essential.',
+      uses: 'Food, flour, chips.',
+      diseases: 'Yam mosaic virus, anthracnose',
+      pests: 'Yam beetle, nematodes',
     },
     {
       id: 8,
-      name: 'Tomato',
-      image: 'https://i.pravatar.cc/100?img=8',
+      name: 'Cassava',
+      image: 'https://media.istockphoto.com/id/179038063/photo/tapioca-plants-cassava.jpg?s=612x612&w=0&k=20&c=qjrUxHsFu66b0GWsaYMpudkHz7IYU04YTPHypQLOcYU=',
       description:
-        'Tomato is a widely cultivated vegetable crop with high nutritional value.',
-      likes: 350,
+        'Cassava is a starchy root crop grown for food and cash income.',
+      likes: 420,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Flowering → 6–8 weeks: Fruit Set → 8–12 weeks: Ripening → Harvest',
-      diseases: 'Late blight, leaf curl virus',
-      pests: 'Whiteflies, thrips, hornworms',
+        '0–1 months: Germination → 3–6 months: Vegetative growth → 6–12 months: Root development → Harvest',
+      cultivationtips:
+        'Plant in well-drained soils; tolerate drought; remove weeds regularly.',
+      uses: 'Flour, gari, tapioca, animal feed.',
+      diseases: 'Cassava mosaic virus, bacterial blight',
+      pests: 'Cassava mites, whiteflies',
     },
     {
       id: 9,
       name: 'Groundnut',
-      image: 'https://i.pravatar.cc/100?img=9',
-      description:
-        'Groundnut, also known as peanut, is valued for its oil-rich seeds.',
-      likes: 290,
+      image: 'https://media.istockphoto.com/id/532971254/photo/peanut.jpg?s=612x612&w=0&k=20&c=xkKnkAPohuhFzdnR73YEKZcyqgqefML-0Gxe_a2uy3U=',
+      description: 'Groundnut is a legume grown for edible seeds and oil.',
+      likes: 350,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Flowering → 4–6 weeks: Pegging → 6–8 weeks: Pod Formation → 8–12 weeks: Maturity → Harvest',
-      diseases: 'Rust, leaf spot',
-      pests: 'Aphids, thrips',
+        '0–2 weeks: Germination → 2–6 weeks: Vegetative growth → 6–10 weeks: Flowering → 10–14 weeks: Pod development → Harvest',
+      cultivationtips:
+        'Plant in sandy loam soils; irrigate moderately; remove weeds.',
+      uses: 'Peanut butter, oil, snacks, animal feed.',
+      diseases: 'Leaf spot, rust',
+      pests: 'Leaf miners, root-knot nematodes',
     },
     {
       id: 10,
-      name: 'Coconut',
-      image: 'https://i.pravatar.cc/100?img=10',
-      description:
-        'Coconut is a perennial tropical crop grown for oil and food products.',
+      name: 'Shea',
+      image: 'https://media.istockphoto.com/id/478735081/photo/shea-nuts-and-leaves.jpg?s=612x612&w=0&k=20&c=6AuPSrzwOJAkUNX8qDlYyCq54l4PMzEgmHKHsH6AZmY=',
+      description: 'Shea nuts are harvested for butter production.',
       likes: 370,
       lifecycle:
-        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Vegetative → 6–8 weeks: Flowering → 8–12 weeks: Fruiting → Harvest',
+        '0–6 months: Seedling → 4–5 years: Flowering → 15–20 years: Fruit production → Harvest',
+      cultivationtips:
+        'Grow in savannah regions; minimal irrigation needed; prune for sunlight.',
+      uses: 'Shea butter, cosmetics, cooking.',
+      diseases: 'Anthracnose, fungal leaf spot',
+      pests: 'Fruit beetles, caterpillars',
+    },
+    {
+      id: 11,
+      name: 'Sorghum',
+      image: 'https://media.istockphoto.com/id/1284394529/photo/ripe-milo-grain-heads-park-county-indiana.jpg?s=612x612&w=0&k=20&c=pchDlSvCfukbCfi_NW6mnLMJoaBwX1RTjdyJKlKn7A4=',
+      description: 'Sorghum is drought-tolerant and grown for food and fodder.',
+      likes: 320,
+      lifecycle:
+        '0–2 weeks: Germination → 2–6 weeks: Vegetative growth → 7–12 weeks: Flowering → 13–16 weeks: Maturity → Harvest',
+      cultivationtips:
+        'Plant in dry areas; ensure proper spacing and fertilization.',
+      uses: 'Food, syrup, animal feed, biofuel.',
+      diseases: 'Anthracnose, grain mold',
+      pests: 'Stem borers, aphids',
+    },
+    {
+      id: 12,
+      name: 'Millet',
+      image: 'https://media.istockphoto.com/id/2075867321/photo/raw-ripe-millet-crops-in-the-field-agriculture-landscape-view.jpg?s=612x612&w=0&k=20&c=t3BODGroageuwC_ocle5B0LLjaIiJIK42-cIEBsNhw8=',
+      description:
+        'Millet is grown in arid northern regions for food and fodder.',
+      likes: 310,
+      lifecycle:
+        '0–2 weeks: Germination → 3–6 weeks: Vegetative growth → 7–10 weeks: Flowering → 11–14 weeks: Maturity → Harvest',
+      cultivationtips:
+        'Requires light soil, minimal irrigation; weed control important.',
+      uses: 'Food, porridge, animal feed.',
+      diseases: 'Blast, downy mildew',
+      pests: 'Aphids, stem borers',
+    },
+    {
+      id: 13,
+      name: 'Plantain',
+      image: 'https://media.istockphoto.com/id/922094380/photo/bananas.jpg?s=612x612&w=0&k=20&c=rn2ufKeLZf3wAUmNUKBi6md-U1gQI4_1038v-VUT3JE=',
+      description: 'Plantain is a staple fruit crop and cash crop in Ghana.',
+      likes: 400,
+      lifecycle:
+        '0–1 month: Planting → 3–6 months: Vegetative growth → 9–12 months: Flowering → 12–18 months: Fruit development → Harvest',
+      cultivationtips:
+        'Plant in fertile soils with irrigation; protect from strong winds.',
+      uses: 'Food, chips, desserts.',
+      diseases: 'Panama disease, bunchy top virus',
+      pests: 'Nematodes, banana weevil',
+    },
+    {
+      id: 14,
+      name: 'Tomato',
+      image: 'https://media.istockphoto.com/id/1299586597/photo/indeterminate-tomato-plants-growing-outside-in-uk.jpg?s=612x612&w=0&k=20&c=XqvpohIQda3X_uqf2GLh_CwUKJAN3SYgqF2Hlo8thSM=',
+      description: 'Tomato is grown for local consumption and export.',
+      likes: 350,
+      lifecycle:
+        '1–2 weeks: Germination → 2–4 weeks: Seedling → 4–6 weeks: Flowering → 6–8 weeks: Fruit Set → 8–12 weeks: Ripening → Harvest',
+      cultivationtips:
+        'Requires full sun, staking, regular watering, and pest control.',
+      uses: 'Sauces, soups, salads, juices.',
+      diseases: 'Late blight, leaf curl virus',
+      pests: 'Whiteflies, thrips, hornworms',
+    },
+    {
+      id: 15,
+      name: 'Pepper',
+      image: 'https://media.istockphoto.com/id/1323318476/photo/bell-peppers-tree-in-garden.jpg?s=612x612&w=0&k=20&c=t4q2wqRI9Ljpdv67B4byiWsV-iQQVIyAed1DtZl-55w=',
+      description: 'Pepper is grown for spice, consumption, and export.',
+      likes: 370,
+      lifecycle:
+        '0–2 weeks: Germination → 3–6 weeks: Seedling → 6–10 weeks: Flowering → 10–14 weeks: Fruit development → Harvest',
+      cultivationtips:
+        'Plant in fertile soil with good drainage; support for tall varieties.',
+      uses: 'Spices, sauces, culinary use.',
+      diseases: 'Bacterial leaf spot, anthracnose',
+      pests: 'Aphids, thrips',
+    },
+    {
+      id: 16,
+      name: 'Ginger',
+      image: 'https://media.istockphoto.com/id/159202960/photo/ginger-plantation.jpg?s=612x612&w=0&k=20&c=SLUkuj2cNFljI076PyuSdGr8KXhTpZFQk05kKA89nzo=',
+      description: 'Ginger is a root crop grown for spice and medicinal uses.',
+      likes: 330,
+      lifecycle:
+        '0–2 weeks: Sprouting → 2–4 months: Vegetative growth → 8–10 months: Harvest',
+      cultivationtips: 'Plant in loose, well-drained soil; maintain moisture.',
+      uses: 'Spices, medicine, tea, export.',
+      diseases: 'Rhizome rot, leaf spot',
+      pests: 'Nematodes, aphids',
+    },
+    {
+      id: 17,
+      name: 'Coconut',
+      image: 'https://media.istockphoto.com/id/594911094/photo/green-coconuts-hanging-on-tree.jpg?s=612x612&w=0&k=20&c=Khj4FCMHVOKlxB608c6n70qdZbPCG0SqRWw0SCpOQH4=',
+      description:
+        'Coconut palms are grown for oil, water, and copra production.',
+      likes: 390,
+      lifecycle:
+        '0–6 months: Seedling → 6–10 years: First fruiting → 60+ years: Productive palms',
+      cultivationtips:
+        'Plant in sandy soils with good drainage; requires coastal climate.',
+      uses: 'Oil, copra, water, fiber.',
       diseases: 'Bud rot, leaf blight',
-      pests: 'Red palm weevil, rhinoceros beetle',
+      pests: 'Rhinoceros beetle, red palm weevil',
+    },
+    {
+      id: 18,
+      name: 'Mango',
+      image: 'https://cdn.pixabay.com/photo/2020/06/21/19/49/mango-5326518_640.jpg',
+      description: 'Mango is grown for fresh fruit and export.',
+      likes: 410,
+      lifecycle:
+        '0–6 months: Seedling → 3–5 years: Flowering → 5–7 years: Fruit production → Harvest',
+      cultivationtips:
+        'Plant in well-drained soil with adequate sunlight and irrigation.',
+      uses: 'Fresh fruit, juice, jams, export.',
+      diseases: 'Anthracnose, powdery mildew',
+      pests: 'Fruit flies, aphids',
+    },
+    {
+      id: 19,
+      name: 'Sweet Potato',
+      image: 'https://cdn.pixabay.com/photo/2017/09/24/15/23/batata-2782146_640.jpg',
+      description: 'Sweet potato is grown for food and local trade.',
+      likes: 340,
+      lifecycle:
+        '0–2 weeks: Germination → 2–6 weeks: Vegetative growth → 6–12 weeks: Root development → Harvest',
+      cultivationtips:
+        'Plant in loose soil with moderate irrigation; remove weeds.',
+      uses: 'Food, flour, chips.',
+      diseases: 'Root rot, leaf spot',
+      pests: 'Weevils, nematodes',
+    },
+    {
+      id: 20,
+      name: 'Banana',
+      image: 'https://cdn.pixabay.com/photo/2024/04/22/15/19/banana-plant-8712877_640.jpg',
+      description: 'Banana is a staple fruit crop and cash crop in Ghana.',
+      likes: 400,
+      lifecycle:
+        '0–1 month: Planting → 3–6 months: Vegetative growth → 9–12 months: Flowering → 12–18 months: Fruit development → Harvest',
+      cultivationtips:
+        'Plant in fertile soil; provide irrigation and protect from wind.',
+      uses: 'Food, smoothies, chips, export.',
+      diseases: 'Panama disease, banana bunchy top virus',
+      pests: 'Nematodes, banana weevil',
     },
   ];
 

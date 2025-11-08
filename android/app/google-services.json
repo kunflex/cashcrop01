@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18975102503",
+    "project_id": "cash-crop-896d9",
+    "storage_bucket": "cash-crop-896d9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18975102503:android:4c02e0203cf2333a382002",
+        "android_client_info": {
+          "package_name": "com.cropapp01"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjGXOnJSFBJUhhL4XbO9fHjemt61wAD6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

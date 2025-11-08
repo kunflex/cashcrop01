@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,45 @@ import {
   ScrollView,
 } from 'react-native';
 import TopNav from '../navigations/TopNav';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebaseConfig'; // ✅ adjust path to your config
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = () => {
+  const navigation: any = useNavigation();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  // ✅ Get the currently logged-in user's email
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setUserEmail(user.email);
+    }
+  }, []);
+
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Logout', onPress: () => Alert.alert('Logged out!') },
+      {
+        text: 'Logout',
+        onPress: async () => {
+          try {
+            await signOut(auth);
+            Alert.alert(
+              'Logged out!',
+              'You have been signed out successfully.'
+            );
+
+            // ✅ Redirect to Login screen
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'LoginScreen' }],
+            });
+          } catch (error: any) {
+            Alert.alert('Error', error.message);
+          }
+        },
+      },
     ]);
   };
 
@@ -25,7 +58,7 @@ const ProfileScreen = () => {
   // Sample user data
   const user = {
     name: 'Rudolf Kpobi',
-    email: 'Rudolf@example.com',
+    email: userEmail || 'Loading...', // ✅ use Firebase email
     phone: '+233 50 894 5198',
     address: 'Teshie, Accra, Ghana',
     image: 'https://i.pravatar.cc/100', // placeholder profile image
@@ -33,11 +66,18 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Top bar */}
-      <TopNav/>
-      
-      <View style={{height:260,backgroundColor:'#4CAF50',zIndex:0,borderBottomEndRadius:'20%', borderBottomStartRadius:'20%'}}></View>
-      {/* Profile Image & Edit Button */}
+      <TopNav />
+
+      <View
+        style={{
+          height: 260,
+          backgroundColor: '#4CAF50',
+          zIndex: 0,
+          borderBottomEndRadius: '20%',
+          borderBottomStartRadius: '20%',
+        }}
+      />
+
       <View style={styles.profileSection}>
         <Image source={{ uri: user.image }} style={styles.profileImage} />
         <Text style={styles.welcomeMessage}>Welcome, {user.name}!</Text>
@@ -46,10 +86,9 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* User Info */}
       <View style={styles.infoContainer}>
         {Object.entries(user).map(([key, value]) => {
-          if (key === 'image' || key === 'name') return null; // skip image and name
+          if (key === 'image' || key === 'name') return null;
           return (
             <View key={key} style={styles.infoRow}>
               <Text style={styles.label}>
@@ -61,7 +100,6 @@ const ProfileScreen = () => {
         })}
       </View>
 
-      {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
@@ -71,6 +109,8 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
+// Styles remain unchanged
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -79,9 +119,9 @@ const styles = StyleSheet.create({
   profileSection: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
     marginVertical: 40,
-    marginTop:-90,
+    marginTop: -90,
   },
 
   profileImage: {
@@ -113,9 +153,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   infoContainer: {
-    backgroundColor:'white',
-    padding:12,
-    borderRadius:10,
+    backgroundColor: 'white',
+    padding: 12,
+    borderRadius: 10,
     marginHorizontal: 25,
     marginBottom: 30,
   },

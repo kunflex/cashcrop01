@@ -15,6 +15,9 @@ export type RootStackParamList = {
   ActivityTracker: { farm: Farm };
   CropDetails: {
     crop: {
+      uses: any;
+      cultivationtips: any;
+      uses: any;
       id: number;
       name: string;
       image: string;

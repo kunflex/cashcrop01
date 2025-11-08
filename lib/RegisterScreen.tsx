@@ -14,6 +14,8 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // ← icon package
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebaseConfig"; // make sure path is correct
 
 interface RegisterScreenProps {
   onRegister: (email: string, password: string) => void;
@@ -32,17 +34,26 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleRegister = () => {
-    if (!email || !password || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all fields.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
-      return;
-    }
-    onRegister(email, password);
-  };
+  // Inside handleRegister:
+const handleRegister = async () => {
+  if (!email || !password || !confirmPassword) {
+    Alert.alert('Error', 'Please fill in all fields.');
+    return;
+  }
+  if (password !== confirmPassword) {
+    Alert.alert('Error', 'Passwords do not match.');
+    return;
+  }
+
+  try {
+    // Firebase registration
+    await createUserWithEmailAndPassword(auth, email, password);
+    Alert.alert("Success", "Account created successfully!");
+  } catch (error: any) {
+    console.log(error);
+    Alert.alert("Registration Error", error.message);
+  }
+};
 
   return (
     <KeyboardAvoidingView

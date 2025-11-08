@@ -14,7 +14,8 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+ import auth from '@react-native-firebase/auth';
+ 
 interface LoginScreenProps {
   onLogin: (email: string, password: string) => void;
   onNavigateToRegister: () => void;
@@ -30,13 +31,32 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter email and password.');
-      return;
-    }
+
+
+const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Error', 'Please enter email and password.');
+    return;
+  }
+
+  try {
+    const userCredential = await auth().signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    Alert.alert('Success', `Welcome back, ${user.email}`);
     onLogin(email, password);
-  };
+  } catch (error: any) {
+    console.error(error);
+    if (error.code === 'auth/user-not-found') {
+      Alert.alert('Error', 'No user found with that email.');
+    } else if (error.code === 'auth/wrong-password') {
+      Alert.alert('Error', 'Incorrect password.');
+    } else {
+      Alert.alert('Error', error.message);
+    }
+  }
+};
+
 
   return (
     <KeyboardAvoidingView
